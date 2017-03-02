@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="ViewPager," />
 
 
 
@@ -84,13 +84,22 @@
 
 
 
+<meta name="description" content="看了http://blog.csdn.net/qq_34972666/article/details/52386999?locationNum=11这篇文章，自己记录一下
+public class CustomViewpager extends ViewPager {    private int current;    private int height = 0;    /** 
+ * 保存p">
 <meta property="og:type" content="article">
-<meta property="og:title" content="test">
-<meta property="og:url" content="https://lijionghui.github.io/2017/02/07/test/index.html">
+<meta property="og:title" content="viewPager自适应">
+<meta property="og:url" content="https://lijionghui.github.io/2017/03/02/viewPager自适应-0/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:updated_time" content="2017-02-07T07:37:58.000Z">
+<meta property="og:description" content="看了http://blog.csdn.net/qq_34972666/article/details/52386999?locationNum=11这篇文章，自己记录一下
+public class CustomViewpager extends ViewPager {    private int current;    private int height = 0;    /** 
+ * 保存p">
+<meta property="og:updated_time" content="2017-03-02T02:37:24.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="test">
+<meta name="twitter:title" content="viewPager自适应">
+<meta name="twitter:description" content="看了http://blog.csdn.net/qq_34972666/article/details/52386999?locationNum=11这篇文章，自己记录一下
+public class CustomViewpager extends ViewPager {    private int current;    private int height = 0;    /** 
+ * 保存p">
 
 
 
@@ -118,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://lijionghui.github.io/2017/02/07/test/"/>
+  <link rel="canonical" href="https://lijionghui.github.io/2017/03/02/viewPager自适应-0/"/>
 
 
 
 
 
-  <title> test | Hexo </title>
+  <title> viewPager自适应 | Hexo </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -247,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://lijionghui.github.io/2017/02/07/test/">
+  <link itemprop="mainEntityOfPage" href="https://lijionghui.github.io/2017/03/02/viewPager自适应-0/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="lijionghui">
@@ -271,7 +280,7 @@
             
             
               
-                test
+                viewPager自适应
               
             
           </h1>
@@ -286,8 +295,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-07T15:34:45+08:00">
-                2017-02-07
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-02T10:36:06+08:00">
+                2017-03-02
               </time>
             
 
@@ -309,8 +318,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index">
-                    <span itemprop="name">android</span>
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
                   </a>
                 </span>
 
@@ -327,8 +336,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/02/07/test/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/07/test/" itemprop="commentCount"></span>
+                <a href="/2017/03/02/viewPager自适应-0/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/02/viewPager自适应-0/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -354,7 +363,116 @@
       
 
       
-        
+        <p>看了<a href="http://blog.csdn.net/qq_34972666/article/details/52386999?locationNum=11这篇文章，自己记录一下" target="_blank" rel="external">http://blog.csdn.net/qq_34972666/article/details/52386999?locationNum=11这篇文章，自己记录一下</a></p>
+<p>public class CustomViewpager extends ViewPager {<br>    private int current;<br>    private int height = 0;<br>    /** </p>
+<pre><code> * 保存position与对于的View 
+ */  
+private HashMap&lt;Integer, View&gt; mChildrenViews = new LinkedHashMap&lt;Integer, View&gt;();  
+
+private boolean scrollble = true;  
+
+public CustomViewpager(Context context) {  
+    super(context);  
+}  
+
+public CustomViewpager(Context context, AttributeSet attrs) {  
+    super(context, attrs);  
+}  
+
+
+@Override  
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {  
+    if (mChildrenViews.size() &gt; current) {  
+        View child = mChildrenViews.get(current);  
+        child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));  
+        height = child.getMeasuredHeight();  
+    }  
+
+    heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);  
+
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec);  
+}  
+
+public void resetHeight(int current) {  
+    this.current = current;  
+    if (mChildrenViews.size() &gt; current) {  
+
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) getLayoutParams();  
+        if (layoutParams == null) {  
+            layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);  
+        } else {  
+            layoutParams.height = height;  
+        }  
+        setLayoutParams(layoutParams);  
+    }  
+}  
+/** 
+ * 保存position与对于的View 
+ */  
+public void setObjectForPosition(View view, int position)  
+{  
+    mChildrenViews.put(position, view);  
+}  
+
+
+@Override  
+public boolean onTouchEvent(MotionEvent ev) {  
+    if (!scrollble) {  
+        return true;  
+    }  
+    return super.onTouchEvent(ev);  
+}  
+
+
+public boolean isScrollble() {  
+    return scrollble;  
+}  
+
+public void setScrollble(boolean scrollble) {  
+    this.scrollble = scrollble;  
+}  
+</code></pre><p>}  </p>
+<p>适用方法<br>public SecurityInfoFragment(CustomViewpager vp) {<br>        this.vp = vp;<br>    }  </p>
+<pre><code>@Nullable  
+@Override  
+public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {  
+    View view = inflater.inflate(R.layout.fg_sc_filght_info, null);  
+    ButterKnife.bind(this, view);  
+    vp.setObjectForPosition(view,1);  
+    return view;  
+} 
+</code></pre><p> activityScdetailsBottomVp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {<br>            @Override<br>            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {  </p>
+<pre><code>}  
+
+@Override  
+public void onPageSelected(int position) {  
+    activityScdetailsBottomVp.resetHeight(position);  
+
+    if (position == 0) {  
+
+        activityScdetailsBottomLinear.setBackgroundResource(R.drawable.fishbone_diagram_list_btn_1);  
+        activityScdetailsBottomTaskTv.setTextColor(Color.parseColor(&quot;#ffffff&quot;));  
+        activityScdetailsBottomInfoTv.setTextColor(Color.parseColor(&quot;#c1c1c1&quot;));  
+        activityScdetailsBottomTimeTv.setTextColor(Color.parseColor(&quot;#c1c1c1&quot;));  
+
+    } else if (position == 1) {  
+</code></pre><p>//                    if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.LOLLIPOP_MR1) {<br>//                        activityScdetailsBottomVp.resetHeight(2);<br>//                    } else {<br>//                        activityScdetailsBottomVp.resetHeight(1);<br>//                    }<br>                    activityScdetailsBottomLinear.setBackgroundResource(R.drawable.fishbone_diagram_list_btn_2);<br>                    activityScdetailsBottomTaskTv.setTextColor(Color.parseColor(“#c1c1c1”));<br>                    activityScdetailsBottomInfoTv.setTextColor(Color.parseColor(“#ffffff”));<br>                    activityScdetailsBottomTimeTv.setTextColor(Color.parseColor(“#c1c1c1”));<br>                } else {  </p>
+<pre><code>                activityScdetailsBottomLinear.setBackgroundResource(R.drawable.fishbone_diagram_list_btn_3);  
+                activityScdetailsBottomTaskTv.setTextColor(Color.parseColor(&quot;#c1c1c1&quot;));  
+                activityScdetailsBottomInfoTv.setTextColor(Color.parseColor(&quot;#c1c1c1&quot;));  
+                activityScdetailsBottomTimeTv.setTextColor(Color.parseColor(&quot;#ffffff&quot;));  
+            }  
+        }  
+        @Override  
+        public void onPageScrollStateChanged(int state) {  
+
+        }  
+    });  
+    activityScdetailsBottomVp.resetHeight(0);  
+
+
+}  
+</code></pre>
       
     </div>
 
@@ -375,13 +493,19 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/ViewPager/" rel="tag"># ViewPager</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/02/07/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2017/02/07/test/" rel="next" title="test">
+                <i class="fa fa-chevron-left"></i> test
               </a>
             
           </div>
@@ -389,10 +513,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/02/viewPager自适应-0/" rel="prev" title="viewPager自适应">
-                viewPager自适应 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -418,8 +538,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/02/07/test/"
-           data-title="test" data-url="https://lijionghui.github.io/2017/02/07/test/">
+      <div class="ds-thread" data-thread-key="2017/03/02/viewPager自适应-0/"
+           data-title="viewPager自适应" data-url="https://lijionghui.github.io/2017/03/02/viewPager自适应-0/">
       </div>
     
   </div>
