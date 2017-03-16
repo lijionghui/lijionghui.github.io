@@ -90,7 +90,7 @@
 <meta property="og:url" content="https://lijionghui.github.io/2017/03/08/retrofit 上传文件/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="retrofit 上传文件单文件上传12345@Multipart@POST(&quot;register&quot;)Call&amp;lt;User&amp;gt; registerUser(@PartMultipartBody.Part photo,@Part(&quot;username&quot;) RequestBody username,@Part(&quot;password&quot;) RequestBody password);File file =">
-<meta property="og:updated_time" content="2017-03-08T07:53:40.000Z">
+<meta property="og:updated_time" content="2017-03-16T06:46:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="retrofit 上传文件">
 <meta name="twitter:description" content="retrofit 上传文件单文件上传12345@Multipart@POST(&quot;register&quot;)Call&amp;lt;User&amp;gt; registerUser(@PartMultipartBody.Part photo,@Part(&quot;username&quot;) RequestBody username,@Part(&quot;password&quot;) RequestBody password);File file =">
@@ -312,8 +312,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
+                  <a href="/categories/android/" itemprop="url" rel="index">
+                    <span itemprop="name">android</span>
                   </a>
                 </span>
 
@@ -359,6 +359,7 @@
       
         <h1 id="retrofit-上传文件"><a href="#retrofit-上传文件" class="headerlink" title="retrofit 上传文件"></a>retrofit 上传文件</h1><h2 id="单文件上传"><a href="#单文件上传" class="headerlink" title="单文件上传"></a>单文件上传</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Multipart</span></div><div class="line"><span class="meta">@POST</span>(<span class="string">"register"</span>)</div><div class="line"><span class="function">Call&lt;User&gt; <span class="title">registerUser</span><span class="params">(@PartMultipartBody.Part photo,@Part(<span class="string">"username"</span>)</span> RequestBody username,@<span class="title">Part</span><span class="params">(<span class="string">"password"</span>)</span> RequestBody password)</span>;</div><div class="line"></div><div class="line">File file = <span class="keyword">new</span> File(Environment.getExternalStorageDirectory(), <span class="string">"icon.png"</span>); RequestBody photoRequestBody = RequestBody.create(MediaType.parse(<span class="string">"image/png"</span>), file); MultipartBody.Part photo = MultipartBody.Part.createFormData(<span class="string">"photos"</span>, <span class="string">"icon.png"</span>, photoRequestBody); Call&lt;User&gt; call = userBiz.registerUser(photo, RequestBody.create(<span class="keyword">null</span>, <span class="string">"abc"</span>), RequestBody.create(<span class="keyword">null</span>, <span class="string">"123"</span>));</div></pre></td></tr></table></figure>
 <h2 id="多文件上传"><a href="#多文件上传" class="headerlink" title="多文件上传"></a>多文件上传</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Multipart</span></div><div class="line"><span class="meta">@POST</span>(<span class="string">"register"</span>)</div><div class="line"><span class="function">Call&lt;User&gt; <span class="title">registerUser</span><span class="params">(@PartMapMap&lt;String, RequestBody&gt; params,@Part(<span class="string">"password"</span>)</span> RequestBody password)</span>;</div><div class="line"></div><div class="line"></div><div class="line">File file = <span class="keyword">new</span> File(Environment.getExternalStorageDirectory(), <span class="string">"messenger_01.png"</span>); RequestBody photo = RequestBody.create(MediaType.parse(<span class="string">"image/png"</span>, file); Map&lt;String,RequestBody&gt; photos = <span class="keyword">new</span> HashMap&lt;&gt;(); photos.put(<span class="string">"photos\"; filename=\"icon.png"</span>, photo); photos.put(<span class="string">"username"</span>, RequestBody.create(<span class="keyword">null</span>, <span class="string">"abc"</span>)); Call&lt;User&gt; call = userBiz.registerUser(photos, RequestBody.create(<span class="keyword">null</span>, <span class="string">"123"</span>));</div></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -481,7 +482,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">1</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
