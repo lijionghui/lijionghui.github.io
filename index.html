@@ -248,6 +248,180 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://lijionghui.github.io/2018/04/02/从启动Activity方法中学习Kotlin/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="lijionghui">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Hexo">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Hexo" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/04/02/从启动Activity方法中学习Kotlin/" itemprop="url">
+                  从启动Activity方法中学习Kotlin
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-02T22:30:26+08:00">
+                2018-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/kotlin/" itemprop="url" rel="index">
+                    <span itemprop="name">kotlin</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/02/从启动Activity方法中学习Kotlin/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/04/02/从启动Activity方法中学习Kotlin/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近学习kotlin，想到kotlin在其他方法内部中如何启动Activity,查了一下是</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">val intent = Intent(this@SplashActivity, MainActivity::class.java)</div><div class="line">startActivity(intent)</div><div class="line">```   </div><div class="line">这里用到了this表达式,kotlin中要访问来自外部作用域的this时，我们需要使用this@label，其中@label是一个代指this来源的标签，在上面就是代指来源自SplashActivity。</div><div class="line">上面还用到了::符号MainActivity::class.java，其实相当于java中的MainActivity.getClass()。</div><div class="line">有时为了方便我们会把启动Activity封装成一个方法，在kotlin中就有了</div><div class="line">   </div><div class="line">``` java</div><div class="line">inline fun &lt;reified T: Activity&gt; Activity.newIntent() &#123;</div><div class="line">    val intent = Intent(this, T::class.java)</div><div class="line">    startActivity(intent)</div><div class="line">&#125;</div><div class="line">``` </div><div class="line">在这个方法中用到了kotlin中的内联函数和扩展函数。下面分别来介绍一下。</div><div class="line">## 1. inline内联函数</div><div class="line">当一个简单的方法被调用时需要用到inline,因为调用一个方法是一个压栈和出栈的过程，调用方法时将栈帧压入方法栈，然后执行方法体，方法结束时将栈栈帧出栈，这个压栈和出栈的过程会耗费资源，这个过程中传递形参也会耗费资源。如以下这个方法</div><div class="line"></div><div class="line">``` java</div><div class="line">fun &lt;T&gt; lock(lock: Lock, body: () -&gt; T): T &#123;</div><div class="line">        lock.lock()</div><div class="line">        try &#123;</div><div class="line">            return body()</div><div class="line">        &#125; finally &#123;</div><div class="line">            lock.unlock()</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>我们调用lock(l, {“lambda方法体”})，会将lock方法进行压栈和出栈操作，而当我们引入inline关键字时，此时再调用lock方法时，编译器会进行优化，相当于直接执行</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">lock.lock()</div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">          <span class="keyword">return</span> <span class="string">"lambda方法体"</span></div><div class="line">      &#125; <span class="keyword">finally</span> &#123;</div><div class="line">          lock.unlock()</div><div class="line">      &#125;</div></pre></td></tr></table></figure>
+<p>也就是说inline关键字实际上增加了代码量，但是提升了性能，而且增加的代码量是在编译期执行的，对程序可读性不会造成影响。</p>
+<h2 id="2-reified具体化的类型参数"><a href="#2-reified具体化的类型参数" class="headerlink" title="2. reified具体化的类型参数"></a>2. reified具体化的类型参数</h2><p>官方说明是这样的<br>有时候我们需要访问一个作为参数传给我们的一个类型：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">fun &lt;T&gt; TreeNode.findParentOfType(clazz: Class&lt;T&gt;): T? &#123;</div><div class="line">    var p = <span class="function">parent</span></div><div class="line">    <span class="title">while</span> <span class="params">(p != <span class="keyword">null</span> &amp;&amp; !clazz.isInstance(p)</span>) &#123;</div><div class="line">        p = p.parent</div><div class="line">    &#125;</div><div class="line">    <span class="meta">@Suppress</span>(<span class="string">"UNCHECKED_CAST"</span>)</div><div class="line">    <span class="keyword">return</span> p as T?</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这里我们向上遍历一棵树并且检查每个节点是不是特定的类型。 这都没有问题，但是调用处不是很优雅：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">treeNode.findParentOfType(MyTreeNode::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></div></pre></td></tr></table></figure>
+<p>我们真正想要的只是传一个类型给该函数，即像这样调用它：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">treeNode.findParentOfType&lt;MyTreeNode&gt;()</div></pre></td></tr></table></figure>
+<p>为能够这么做，内联函数支持具体化的类型参数，于是我们可以这样写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">inline fun &lt;reified T&gt; TreeNode.findParentOfType(): T? &#123;</div><div class="line">    var p = <span class="function">parent</span></div><div class="line">    <span class="title">while</span> <span class="params">(p != <span class="keyword">null</span> &amp;&amp; p !is T)</span> &#123;</div><div class="line">        p = p.parent</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> p as T?</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们使用 reified 修饰符来限定类型参数，现在可以在函数内部访问它了， 几乎就像是一个普通的类一样。由于函数是内联的，不需要反射，正常的操作符如 !is 和 as 现在都能用了。此外，我们还可以按照上面提到的方式调用它：myTree.findParentOfType<mytreenodetype>()。<br>对比我们的Activity,总的来说就是用了reified后，就能在方法内直接使用传入的Activity具体类型。</mytreenodetype></p>
+<h2 id="3-kotlin扩展函数"><a href="#3-kotlin扩展函数" class="headerlink" title="3. kotlin扩展函数"></a>3. kotlin扩展函数</h2><p>声明一个扩展函数，我们需要用一个接收者类型也就是被扩展的类型来作为他的前缀。下面代码为MutableList<int>添加一个swap 函数：</int></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fun MutableList&lt;Int&gt;.swap(index1: Int, index2: Int) &#123;</div><div class="line">    val tmp = <span class="keyword">this</span>[index1] <span class="comment">// “this”对应该列表</span></div><div class="line">    <span class="keyword">this</span>[index1] = <span class="keyword">this</span>[index2]</div><div class="line">    <span class="keyword">this</span>[index2] = tmp</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个this关键字在扩展函数内部对应到接收者对象（传过来的在点符号前的对象）现在，我们对任意 MutableList<int> 调用该函数了：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">val l = mutableListOf(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</div><div class="line">l.swap(<span class="number">0</span>, <span class="number">2</span>) <span class="comment">// “swap()”内部的“this”得到“l”的值</span></div></pre></td></tr></table></figure></int></p>
+<p>对于我们的Activity启动</p>
+<pre><code class="java">inline fun &lt;reified T: Activity&gt; Activity.newIntent() {
+    val intent = Intent(<span class="keyword">this</span>, T::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)
+    <span class="title">startActivity</span>(<span class="title">intent</span>)
+}</span>
+</code></pre>
+<p>其实相当于对Activity类型添加一个newIntent()方法，使得任意Activity可以调用这个方法。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="https://lijionghui.github.io/2018/03/13/Mac下使用sublime导入源代码/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -360,11 +534,11 @@
       
         
           
-            <h1 id="Mac下使用sublime导入Android源代码"><a href="#Mac下使用sublime导入Android源代码" class="headerlink" title="Mac下使用sublime导入Android源代码"></a>Mac下使用sublime导入Android源代码</h1><p>##1.下载源代码<br>    到（<a href="https://github.com/android/platform_frameworks_base）去下载一份源码。" target="_blank" rel="external">https://github.com/android/platform_frameworks_base）去下载一份源码。</a></p>
-<p>##2.下载配置sublime<br>    选择sublime菜单栏的File -&gt; Open 选择源码解压后的根目录，打开，然后就可以看到Android源码的列表在左侧展示了。     </p>
-<p>##3.使用Ctags代码跳转插件<br>1.左上角Sublime Text 2 -&gt; Preference -&gt; Browse Packages 查看是否已经安装了CTags Package，如果没有则需要安装<br>2.Sublime Text 2 -&gt; Preference -&gt; Package Control, 输入Install Package，在列表中输入选择 Ctags 插件进行安装<br>3.修改函数跳转方式：Perference -&gt; Package Settings-&gt;CTags-&gt;Mouse Binding Default-&gt;复制全部-&gt;粘贴到Mouse Binding User<br>把里面的”ctrl+shift”，修改为“command”，<pre><code>[<br>    {<br>        “button”: “button1”,<br>        “count”: 1,<br>        “press_command”: “drag_select”,<br>        “modifiers”: [“command”],<br>        “command”: “navigate_to_definition”<br>    },<br>    {<br>        “button”: “button2”,<br>        “count”: 1,<br>        “modifiers”: [“command”],<br>        “command”: “jump_prev”<br>    }<br>]</code></pre><br>这样就可以用“command+左键”跳转了<br>4.右键点击侧边栏中Android 源码根目录，右键-&gt; CTags: Rebuild Tags   </p>
-<p>##4.安装Ctags是遇到的问题<br>在右键-&gt; CTags: Rebuild Tags中如果出现警告</p>
-<p><pre><code>ctags: illegal option – R<br>usage: ctags [-BFadtuwvx] [-f tagsfile] file …。<br></code></pre><br>    那么说明你用的Ctags是系统预安装的版本，命令行输入which ctags,如果输出/usr/bin/ctags，就说明这个时候需要我们自己下载一个可用的Ctags。<br>  命令行输入brew install ctags 进行安装。或者直接用这个链接下载 <a href="http://downloads.sourceforge.net/ctags/ctags-5.8.tar.gz" target="_blank" rel="external">http://downloads.sourceforge.net/ctags/ctags-5.8.tar.gz</a><br>  使用brew安装是可能出现ruby版本不符的问题，<pre><code>Homebrew must be run under Ruby 2.3!</code></pre>这时需要将ruby升级，在命令行输入<pre><code> brew install ruby@2.3 </code></pre>如果升级过程中出现<pre><code> Error: Xcode alone is not sufficient on Sierra.Install the Command Line Tools:xcode-select –install  </code></pre>需要输入命令<pre><code>xcode-select –install</code></pre>安装CommandLineTools。<br>  问题都解决后再重新安装ctags。<br>  安装完成后在usr/local/bin/ 目录下可以看到安装完成的ctags。<br>  接下来我们在终端 中用cd命令跳转到源码的根目录 ，执行/usr/local/bin/ctags -R -f .tags ，等待片刻，目录下会生成一个.tags的文件。<br>  接下来可以点击源码中的方法或者类进行跳转了。
+            <h1 id="Mac下使用sublime导入Android源代码"><a href="#Mac下使用sublime导入Android源代码" class="headerlink" title="Mac下使用sublime导入Android源代码"></a>Mac下使用sublime导入Android源代码</h1><h2 id="1-下载源代码"><a href="#1-下载源代码" class="headerlink" title="1.下载源代码"></a>1.下载源代码</h2><p>  到（<a href="https://github.com/android/platform_frameworks_base）去下载一份源码。" target="_blank" rel="external">https://github.com/android/platform_frameworks_base）去下载一份源码。</a></p>
+<h2 id="2-下载配置sublime"><a href="#2-下载配置sublime" class="headerlink" title="2.下载配置sublime"></a>2.下载配置sublime</h2><p>  选择sublime菜单栏的File -&gt; Open 选择源码解压后的根目录，打开，然后就可以看到Android源码的列表在左侧展示了。     </p>
+<h2 id="3-使用Ctags代码跳转插件"><a href="#3-使用Ctags代码跳转插件" class="headerlink" title="3.使用Ctags代码跳转插件"></a>3.使用Ctags代码跳转插件</h2><p>  1.左上角Sublime Text 2 -&gt; Preference -&gt; Browse Packages 查看是否已经安装了CTags Package，如果没有则需要安装<br>  2.Sublime Text 2 -&gt; Preference -&gt; Package Control, 输入Install Package，在列表中输入选择 Ctags 插件进行安装<br>  3.修改函数跳转方式：Perference -&gt; Package Settings-&gt;CTags-&gt;Mouse Binding Default-&gt;复制全部-&gt;粘贴到Mouse Binding User<br>把里面的”ctrl+shift”，修改为“command”，<pre><code>[<br>    {<br>        “button”: “button1”,<br>        “count”: 1,<br>        “press_command”: “drag_select”,<br>        “modifiers”: [“command”],<br>        “command”: “navigate_to_definition”<br>    },<br>    {<br>        “button”: “button2”,<br>        “count”: 1,<br>        “modifiers”: [“command”],<br>        “command”: “jump_prev”<br>    }<br>]</code></pre><br>这样就可以用“command+左键”跳转了<br>  4.右键点击侧边栏中Android 源码根目录，右键-&gt; CTags: Rebuild Tags   </p>
+<p>##4.安装Ctags是遇到的问题<br>  在右键-&gt; CTags: Rebuild Tags中如果出现警告</p>
+<p><pre><code>ctags: illegal option – R<br>usage: ctags [-BFadtuwvx] [-f tagsfile] file …。<br></code></pre>那么说明你用的Ctags是系统预安装的版本，命令行输入which ctags,如果输出/usr/bin/ctags，就说明这个时候需要我们自己下载一个可用的Ctags。<br>  命令行输入brew install ctags 进行安装。或者直接用这个链接下载 <a href="http://downloads.sourceforge.net/ctags/ctags-5.8.tar.gz" target="_blank" rel="external">http://downloads.sourceforge.net/ctags/ctags-5.8.tar.gz</a><br>  使用brew安装是可能出现ruby版本不符的问题，<pre><code>Homebrew must be run under Ruby 2.3!</code></pre>这时需要将ruby升级，在命令行输入<pre><code> brew install ruby@2.3 </code></pre>如果升级过程中出现<pre><code> Error: Xcode alone is not sufficient on Sierra.Install the Command Line Tools:xcode-select –install  </code></pre>需要输入命令<pre><code>xcode-select –install</code></pre>安装CommandLineTools。<br>  问题都解决后再重新安装ctags。<br>  安装完成后在usr/local/bin/ 目录下可以看到安装完成的ctags。<br>  接下来我们在终端 中用cd命令跳转到源码的根目录 ，执行/usr/local/bin/ctags -R -f .tags ，等待片刻，目录下会生成一个.tags的文件。<br>  接下来可以点击源码中的方法或者类进行跳转了。
   </p>
 
           
@@ -837,7 +1011,6 @@
             <h1 id="ViewPager自适应不同高度Fragment"><a href="#ViewPager自适应不同高度Fragment" class="headerlink" title="ViewPager自适应不同高度Fragment"></a>ViewPager自适应不同高度Fragment</h1><p>看了(<a href="http://blog.csdn.net/qq_34972666/article/details/52386999?locationNum=11)这篇文章，自己记录一下" target="_blank" rel="external">http://blog.csdn.net/qq_34972666/article/details/52386999?locationNum=11)这篇文章，自己记录一下</a></p>
 <h2 id="自定义Viewpager"><a href="#自定义Viewpager" class="headerlink" title="自定义Viewpager"></a>自定义Viewpager</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomViewpager</span> <span class="keyword">extends</span> <span class="title">ViewPager</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> current;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> height = <span class="number">0</span>;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 保存position与对于的View</div><div class="line">     */</div><div class="line">    <span class="keyword">private</span> HashMap&lt;Integer, View&gt; mChildrenViews = <span class="keyword">new</span> LinkedHashMap&lt;Integer, View&gt;();</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> scrollble = <span class="keyword">true</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomViewpager</span><span class="params">(Context context)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(context);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomViewpager</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(context, attrs);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (mChildrenViews.size() &gt; current) &#123;</div><div class="line">            View child = mChildrenViews.get(current);</div><div class="line">            child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(<span class="number">0</span>, MeasureSpec.UNSPECIFIED));</div><div class="line">            height = child.getMeasuredHeight();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);</div><div class="line"></div><div class="line">        <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">resetHeight</span><span class="params">(<span class="keyword">int</span> current)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.current = current;</div><div class="line">        <span class="keyword">if</span> (mChildrenViews.size() &gt; current) &#123;</div><div class="line"></div><div class="line">            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) getLayoutParams();</div><div class="line">            <span class="keyword">if</span> (layoutParams == <span class="keyword">null</span>) &#123;</div><div class="line">                layoutParams = <span class="keyword">new</span> LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                layoutParams.height = height;</div><div class="line">            &#125;</div><div class="line">            setLayoutParams(layoutParams);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 保存position与对于的View</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setObjectForPosition</span><span class="params">(View view, <span class="keyword">int</span> position)</span> </span>&#123;</div><div class="line">        mChildrenViews.put(position, view);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent ev)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (!scrollble) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.onTouchEvent(ev);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isScrollble</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> scrollble;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setScrollble</span><span class="params">(<span class="keyword">boolean</span> scrollble)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.scrollble = scrollble;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>fragment使用<code>vp.setObjectForPosition(view,1);</code><br>然后调用<code>resetHeight()</code>方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">activityScdetailsBottomVp.setOnPageChangeListener(<span class="keyword">new</span> ViewPager.OnPageChangeListener() &#123;  </div><div class="line">            <span class="meta">@Override</span>  </div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageScrolled</span><span class="params">(<span class="keyword">int</span> position, <span class="keyword">float</span> positionOffset, <span class="keyword">int</span> positionOffsetPixels)</span> </span>&#123;  </div><div class="line">  </div><div class="line">            &#125;  </div><div class="line">  </div><div class="line">            <span class="meta">@Override</span>  </div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageSelected</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;  </div><div class="line">                activityScdetailsBottomVp.resetHeight(position);  </div><div class="line">  </div><div class="line">              </div><div class="line">            &#125;  </div><div class="line">            <span class="meta">@Override</span>  </div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageScrollStateChanged</span><span class="params">(<span class="keyword">int</span> state)</span> </span>&#123;  </div><div class="line">  </div><div class="line">            &#125;  </div><div class="line">        &#125;);  </div><div class="line">        activityScdetailsBottomVp.resetHeight(<span class="number">0</span>);  </div><div class="line">  </div><div class="line">  </div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
-<p>第一次写markdown,排版不好，继续加油    </p>
 
           
         
@@ -1197,7 +1370,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1206,7 +1379,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
