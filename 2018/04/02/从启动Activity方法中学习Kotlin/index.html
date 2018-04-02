@@ -85,18 +85,21 @@
 
 
 <meta name="description" content="最近学习kotlin，想到kotlin在其他方法内部中如何启动Activity,查了一下是
-1234567891011121314151617181920212223242526val intent = Intent(this@SplashActivity, MainActivity::class.java)startActivity(intent)```   这里用到了this表达式,kotli">
+12val intent = Intent(this@SplashActivity, MainActivity::class.java)startActivity(intent)
+这里用到了this表达式,kotlin中要访问来自外部作用域的this时，我们需要使用this@label，其中@label是一">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从启动Activity方法中学习Kotlin">
 <meta property="og:url" content="https://lijionghui.github.io/2018/04/02/从启动Activity方法中学习Kotlin/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="最近学习kotlin，想到kotlin在其他方法内部中如何启动Activity,查了一下是
-1234567891011121314151617181920212223242526val intent = Intent(this@SplashActivity, MainActivity::class.java)startActivity(intent)```   这里用到了this表达式,kotli">
-<meta property="og:updated_time" content="2018-04-02T16:03:57.000Z">
+12val intent = Intent(this@SplashActivity, MainActivity::class.java)startActivity(intent)
+这里用到了this表达式,kotlin中要访问来自外部作用域的this时，我们需要使用this@label，其中@label是一">
+<meta property="og:updated_time" content="2018-04-02T16:08:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从启动Activity方法中学习Kotlin">
 <meta name="twitter:description" content="最近学习kotlin，想到kotlin在其他方法内部中如何启动Activity,查了一下是
-1234567891011121314151617181920212223242526val intent = Intent(this@SplashActivity, MainActivity::class.java)startActivity(intent)```   这里用到了this表达式,kotli">
+12val intent = Intent(this@SplashActivity, MainActivity::class.java)startActivity(intent)
+这里用到了this表达式,kotlin中要访问来自外部作用域的this时，我们需要使用this@label，其中@label是一">
 
 
 
@@ -361,7 +364,12 @@
 
       
         <p>最近学习kotlin，想到kotlin在其他方法内部中如何启动Activity,查了一下是</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">val intent = Intent(this@SplashActivity, MainActivity::class.java)</div><div class="line">startActivity(intent)</div><div class="line">```   </div><div class="line">这里用到了this表达式,kotlin中要访问来自外部作用域的this时，我们需要使用this@label，其中@label是一个代指this来源的标签，在上面就是代指来源自SplashActivity。</div><div class="line">上面还用到了::符号MainActivity::class.java，其实相当于java中的MainActivity.getClass()。</div><div class="line">有时为了方便我们会把启动Activity封装成一个方法，在kotlin中就有了</div><div class="line">   </div><div class="line">``` java</div><div class="line">inline fun &lt;reified T: Activity&gt; Activity.newIntent() &#123;</div><div class="line">    val intent = Intent(this, T::class.java)</div><div class="line">    startActivity(intent)</div><div class="line">&#125;</div><div class="line">``` </div><div class="line">在这个方法中用到了kotlin中的内联函数和扩展函数。下面分别来介绍一下。</div><div class="line">## 1. inline内联函数</div><div class="line">当一个简单的方法被调用时需要用到inline,因为调用一个方法是一个压栈和出栈的过程，调用方法时将栈帧压入方法栈，然后执行方法体，方法结束时将栈栈帧出栈，这个压栈和出栈的过程会耗费资源，这个过程中传递形参也会耗费资源。如以下这个方法</div><div class="line"></div><div class="line">``` java</div><div class="line">fun &lt;T&gt; lock(lock: Lock, body: () -&gt; T): T &#123;</div><div class="line">        lock.lock()</div><div class="line">        try &#123;</div><div class="line">            return body()</div><div class="line">        &#125; finally &#123;</div><div class="line">            lock.unlock()</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">val intent = Intent(<span class="keyword">this</span><span class="meta">@SplashActivity</span>, MainActivity::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></div><div class="line"><span class="title">startActivity</span>(<span class="title">intent</span>)</div></pre></td></tr></table></figure>
+<p>这里用到了this表达式,kotlin中要访问来自外部作用域的this时，我们需要使用this@label，其中@label是一个代指this来源的标签，在上面就是代指来源自SplashActivity。<br>上面还用到了::符号MainActivity::class.java，其实相当于java中的MainActivity.getClass()。<br>有时为了方便我们会把启动Activity封装成一个方法，在kotlin中就有了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">inline fun &lt;reified T: Activity&gt; Activity.newIntent() &#123;</div><div class="line">    val intent = Intent(<span class="keyword">this</span>, T::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></div><div class="line">    <span class="title">startActivity</span>(<span class="title">intent</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这个方法中用到了kotlin中的内联函数和扩展函数。下面分别来介绍一下。</p>
+<h2 id="1-inline内联函数"><a href="#1-inline内联函数" class="headerlink" title="1. inline内联函数"></a>1. inline内联函数</h2><p>当一个简单的方法被调用时需要用到inline,因为调用一个方法是一个压栈和出栈的过程，调用方法时将栈帧压入方法栈，然后执行方法体，方法结束时将栈栈帧出栈，这个压栈和出栈的过程会耗费资源，这个过程中传递形参也会耗费资源。如以下这个方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">fun &lt;T&gt; lock(lock: Lock, body: () -&gt; T): T &#123;</div><div class="line">        lock.lock()</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">return</span> body()</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            lock.unlock()</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <p>我们调用lock(l, {“lambda方法体”})，会将lock方法进行压栈和出栈操作，而当我们引入inline关键字时，此时再调用lock方法时，编译器会进行优化，相当于直接执行</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">lock.lock()</div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">          <span class="keyword">return</span> <span class="string">"lambda方法体"</span></div><div class="line">      &#125; <span class="keyword">finally</span> &#123;</div><div class="line">          lock.unlock()</div><div class="line">      &#125;</div></pre></td></tr></table></figure>
 <p>也就是说inline关键字实际上增加了代码量，但是提升了性能，而且增加的代码量是在编译期执行的，对程序可读性不会造成影响。</p>
@@ -545,7 +553,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-reified具体化的类型参数"><span class="nav-number">1.</span> <span class="nav-text">2. reified具体化的类型参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-kotlin扩展函数"><span class="nav-number">2.</span> <span class="nav-text">3. kotlin扩展函数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-inline内联函数"><span class="nav-number">1.</span> <span class="nav-text">1. inline内联函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-reified具体化的类型参数"><span class="nav-number">2.</span> <span class="nav-text">2. reified具体化的类型参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-kotlin扩展函数"><span class="nav-number">3.</span> <span class="nav-text">3. kotlin扩展函数</span></a></li></ol></div>
             
 
           </div>
