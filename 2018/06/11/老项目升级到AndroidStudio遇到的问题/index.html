@@ -87,14 +87,14 @@
 <meta name="description" content="1.apt问题解决
 123456781.在project的build.gradle中删除classpath &apos;com.neenbedankt.gradle.plugins:android-apt:1.8&apos;2.在module的build.gradle中删除apply plugin: &apos;com.neenbedankt.android-apt&apos;3.将build.gradle文件中的dependency的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="老项目升级到AndroidStudio遇到的问题">
+<meta property="og:title" content="老项目升级到AndroidStudio3.0遇到的问题">
 <meta property="og:url" content="https://lijionghui.github.io/2018/06/11/老项目升级到AndroidStudio遇到的问题/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="1.apt问题解决
 123456781.在project的build.gradle中删除classpath &apos;com.neenbedankt.gradle.plugins:android-apt:1.8&apos;2.在module的build.gradle中删除apply plugin: &apos;com.neenbedankt.android-apt&apos;3.将build.gradle文件中的dependency的">
-<meta property="og:updated_time" content="2018-06-11T13:25:49.000Z">
+<meta property="og:updated_time" content="2018-06-11T13:33:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="老项目升级到AndroidStudio遇到的问题">
+<meta name="twitter:title" content="老项目升级到AndroidStudio3.0遇到的问题">
 <meta name="twitter:description" content="1.apt问题解决
 123456781.在project的build.gradle中删除classpath &apos;com.neenbedankt.gradle.plugins:android-apt:1.8&apos;2.在module的build.gradle中删除apply plugin: &apos;com.neenbedankt.android-apt&apos;3.将build.gradle文件中的dependency的">
 
@@ -130,7 +130,7 @@
 
 
 
-  <title> 老项目升级到AndroidStudio遇到的问题 | Hexo </title>
+  <title> 老项目升级到AndroidStudio3.0遇到的问题 | Hexo </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -277,7 +277,7 @@
             
             
               
-                老项目升级到AndroidStudio遇到的问题
+                老项目升级到AndroidStudio3.0遇到的问题
               
             
           </h1>
@@ -364,7 +364,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>.在project的build.gradle中删除</div><div class="line">classpath <span class="string">'com.neenbedankt.gradle.plugins:android-apt:1.8'</span></div><div class="line"><span class="number">2</span>.在<span class="keyword">module</span>的build.gradle中删除</div><div class="line">apply plugin: <span class="string">'com.neenbedankt.android-apt'</span></div><div class="line"><span class="number">3</span>.将build.gradle文件中的dependency的apt改成annotationProcessor如</div><div class="line">apt  <span class="string">'com.jakewharton:butterknife-compiler:8.1.0'</span></div><div class="line"><span class="comment">//改为</span></div><div class="line">annotationProcessor  <span class="string">'com.jakewharton:butterknife-compiler:8.1.0'</span></div></pre></td></tr></table></figure>
 <p>2.All flavors must now belong to a named flavor dimension<br>这个问题官网是这样解释的：要解决此错误，请将每个风味分配至一个给定维度，如下面的示例中所示。由于依赖项匹配现在由插件处理，您应当谨慎地为风味维度命名。例如，如果您的所有应用和库模块均使用 foo 维度，您对插件可以匹配的风味的控制力较弱。官网上解决方案如下</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// In the app's build.gradle file.</span></div><div class="line">android &#123;</div><div class="line">    defaultConfig&#123;</div><div class="line">    <span class="comment">// Do not configure matchingFallbacks in the defaultConfig block.</span></div><div class="line">    <span class="comment">// Instead, you must specify fallbacks for a given product flavor in the</span></div><div class="line">    <span class="comment">// productFlavors block, as shown below.</span></div><div class="line">  &#125;</div><div class="line">    flavorDimensions <span class="string">'tier'</span></div><div class="line">    productFlavors &#123;</div><div class="line">        paid &#123;</div><div class="line">            dimension <span class="string">'tier'</span></div><div class="line">            <span class="comment">// Because the dependency already includes a "paid" flavor in its</span></div><div class="line">            <span class="comment">// "tier" dimension, you don't need to provide a list of fallbacks</span></div><div class="line">            <span class="comment">// for the "paid" flavor.</span></div><div class="line">        &#125;</div><div class="line">        free &#123;</div><div class="line">            dimension <span class="string">'tier'</span></div><div class="line">            <span class="comment">// Specifies a sorted list of fallback flavors that the plugin</span></div><div class="line">            <span class="comment">// should try to use when a dependency's matching dimension does</span></div><div class="line">            <span class="comment">// not include a "free" flavor. You may specify as many</span></div><div class="line">            <span class="comment">// fallbacks as you like, and the plugin selects the first flavor</span></div><div class="line">            <span class="comment">// that's available in the dependency's "tier" dimension.</span></div><div class="line">            matchingFallbacks = [<span class="string">'demo'</span>, <span class="string">'trial'</span>]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>就是在android下加入一行flavorDimensions ‘tier’，在下面的<br>productFlavors中对应加入 dimension ‘tier’，具体可查看（<a href="https://developer.android.google.cn/studio/build/gradle-plugin-3-0-0-migration）" target="_blank" rel="external">https://developer.android.google.cn/studio/build/gradle-plugin-3-0-0-migration）</a></p>
+<p>就是在android中加入一行flavorDimensions ‘tier’,在productFlavors中对应加入dimension ‘tier’,具体可查看（<a href="https://developer.android.google.cn/studio/build/gradle-plugin-3-0-0-migration）" target="_blank" rel="external">https://developer.android.google.cn/studio/build/gradle-plugin-3-0-0-migration）</a></p>
 <p>3.遇到类似</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Error:Could not resolve all dependencies <span class="keyword">for</span> configuration</div><div class="line">  <span class="string">':app:prodDebugCompileClasspath'</span>.</div><div class="line">Project :app declares a dependency from configuration <span class="string">'compile'</span></div><div class="line">  to configuration <span class="string">'debug'</span> which is not declared in the descriptor</div><div class="line">  <span class="keyword">for</span> project :foo.</div></pre></td></tr></table></figure>
 <p>的问题，也可以通过（<a href="https://developer.android.google.cn/studio/build/gradle-plugin-3-0-0-migration）自己查看。" target="_blank" rel="external">https://developer.android.google.cn/studio/build/gradle-plugin-3-0-0-migration）自己查看。</a><br>这里贴一下官方给出的方法，您应当按如下方式配置您的依赖项：</p>
@@ -440,7 +440,7 @@
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2018/06/11/老项目升级到AndroidStudio遇到的问题/"
-           data-title="老项目升级到AndroidStudio遇到的问题" data-url="https://lijionghui.github.io/2018/06/11/老项目升级到AndroidStudio遇到的问题/">
+           data-title="老项目升级到AndroidStudio3.0遇到的问题" data-url="https://lijionghui.github.io/2018/06/11/老项目升级到AndroidStudio遇到的问题/">
       </div>
     
   </div>
