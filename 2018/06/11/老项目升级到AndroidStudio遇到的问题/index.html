@@ -92,7 +92,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="1.apt问题解决
 123456781.在project的build.gradle中删除classpath &apos;com.neenbedankt.gradle.plugins:android-apt:1.8&apos;2.在module的build.gradle中删除apply plugin: &apos;com.neenbedankt.android-apt&apos;3.将build.gradle文件中的dependency的">
-<meta property="og:updated_time" content="2018-06-11T13:33:03.000Z">
+<meta property="og:updated_time" content="2018-06-12T03:46:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="老项目升级到AndroidStudio3.0遇到的问题">
 <meta name="twitter:description" content="1.apt问题解决
@@ -373,6 +373,10 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// debugCompile project(path: ':foo', configuration: 'debug')</span></div><div class="line"><span class="comment">// releaseCompile project(path: ':foo', configuration: 'release')</span></div></pre></td></tr></table></figure>
 <p>我们手动配置的依赖使用implementation project。因为现在gradle会自动帮我们去匹配。</p>
 <p>4.Gradle sync failed: Cause: org/gradle/listener/ActionBroadcast<br>老项目使用plugins {<br>    id “org.sonarqube” version “2.2”<br>}<br>解决方法把version改成2.6.（<a href="https://stackoverflow.com/questions/44363124/gradle-sync-failed-cause-org-gradle-listener-actionbroadcast）" target="_blank" rel="external">https://stackoverflow.com/questions/44363124/gradle-sync-failed-cause-org-gradle-listener-actionbroadcast）</a></p>
+<p>5.butterknife报错解决</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Annotation processors must be explicitly declared now.  The following dependencies on the compile classpath are found to contain annotation processor.  Please add them to the annotationProcessor configuration.</div><div class="line">    - butterknife-<span class="number">7.0</span>.1.jar</div></pre></td></tr></table></figure>
+<p>解决方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    ...</div><div class="line">    defaultConfig &#123;</div><div class="line">        ...</div><div class="line">        javaCompileOptions &#123;</div><div class="line">            annotationProcessorOptions &#123;</div><div class="line">                includeCompileClasspath = <span class="keyword">true</span>  </div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
       
     </div>
