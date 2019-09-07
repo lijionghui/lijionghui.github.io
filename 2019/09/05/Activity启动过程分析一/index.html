@@ -84,19 +84,19 @@
 
 
 
-<meta name="description" content="Activity启动过程一启动一个新的Activity的方法为startActivity()
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667@Overridepublic void startAc">
+<meta name="description" content="Activity启动过程分析一启动一个新的Activity的方法为startActivity()
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667@Overridepublic void start">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Activity启动过程一">
-<meta property="og:url" content="https://lijionghui.github.io/2019/09/05/Activity启动过程一/index.html">
+<meta property="og:url" content="https://lijionghui.github.io/2019/09/05/Activity启动过程分析一/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Activity启动过程一启动一个新的Activity的方法为startActivity()
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667@Overridepublic void startAc">
-<meta property="og:updated_time" content="2019-09-06T03:39:37.000Z">
+<meta property="og:description" content="Activity启动过程分析一启动一个新的Activity的方法为startActivity()
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667@Overridepublic void start">
+<meta property="og:updated_time" content="2019-09-07T05:11:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Activity启动过程一">
-<meta name="twitter:description" content="Activity启动过程一启动一个新的Activity的方法为startActivity()
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667@Overridepublic void startAc">
+<meta name="twitter:description" content="Activity启动过程分析一启动一个新的Activity的方法为startActivity()
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667@Overridepublic void start">
 
 
 
@@ -124,7 +124,7 @@
 
 
 
-  <link rel="canonical" href="https://lijionghui.github.io/2019/09/05/Activity启动过程一/"/>
+  <link rel="canonical" href="https://lijionghui.github.io/2019/09/05/Activity启动过程分析一/"/>
 
 
 
@@ -253,7 +253,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://lijionghui.github.io/2019/09/05/Activity启动过程一/">
+  <link itemprop="mainEntityOfPage" href="https://lijionghui.github.io/2019/09/05/Activity启动过程分析一/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="lijionghui">
@@ -333,8 +333,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/09/05/Activity启动过程一/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/09/05/Activity启动过程一/" itemprop="commentCount"></span>
+                <a href="/2019/09/05/Activity启动过程分析一/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/09/05/Activity启动过程分析一/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -360,7 +360,7 @@
       
 
       
-        <h1 id="Activity启动过程一"><a href="#Activity启动过程一" class="headerlink" title="Activity启动过程一"></a>Activity启动过程一</h1><p>启动一个新的Activity的方法为startActivity()</p>
+        <h1 id="Activity启动过程分析一"><a href="#Activity启动过程分析一" class="headerlink" title="Activity启动过程分析一"></a>Activity启动过程分析一</h1><p>启动一个新的Activity的方法为startActivity()</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivity</span><span class="params">(Intent intent)</span> </span>&#123;</div><div class="line">       mBase.startActivity(intent);</div><div class="line">&#125;</div><div class="line"><span class="comment">//这里的mBase为Context对象，startActivity是一个抽象方法</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">startActivity</span><span class="params">(@RequiresPermission Intent intent)</span></span>;</div><div class="line"></div><div class="line"><span class="comment">//Activity继承实现了startActivity(Intent intent)方法</span></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivity</span><span class="params">(Intent intent)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.startActivity(intent, <span class="keyword">null</span>);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"><span class="comment">//会根据Bundle的值来判断调用不同的startActivityForResult方法</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivity</span><span class="params">(Intent intent, @Nullable Bundle options)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (options != <span class="keyword">null</span>) &#123;</div><div class="line">            startActivityForResult(intent, -<span class="number">1</span>, options);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">// Note we want to go through this call for compatibility with</span></div><div class="line">            <span class="comment">// applications that may have overridden the method.</span></div><div class="line">            startActivityForResult(intent, -<span class="number">1</span>);</div><div class="line">        &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//3.最终还是都会调用这个方法</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivityForResult</span><span class="params">(@RequiresPermission Intent intent, <span class="keyword">int</span> requestCode,</span></span></div><div class="line">            @Nullable Bundle options) &#123;</div><div class="line">        <span class="keyword">if</span> (mParent == <span class="keyword">null</span>) &#123;</div><div class="line">            options = transferSpringboardActivityOptions(options);</div><div class="line">            Instrumentation.ActivityResult ar =</div><div class="line">                mInstrumentation.execStartActivity(</div><div class="line">                    <span class="keyword">this</span>, mMainThread.getApplicationThread(), mToken, <span class="keyword">this</span>,</div><div class="line">                    intent, requestCode, options);</div><div class="line">            <span class="keyword">if</span> (ar != <span class="keyword">null</span>) &#123;</div><div class="line">                mMainThread.sendActivityResult(</div><div class="line">                    mToken, mEmbeddedID, requestCode, ar.getResultCode(),</div><div class="line">                    ar.getResultData());</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (requestCode &gt;= <span class="number">0</span>) &#123;</div><div class="line">                mStartedActivity = <span class="keyword">true</span>;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            cancelInputsAndStartExitTransition(options);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">if</span> (options != <span class="keyword">null</span>) &#123;</div><div class="line">                mParent.startActivityFromChild(<span class="keyword">this</span>, intent, requestCode, options);</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">               mParent.startActivityFromChild(<span class="keyword">this</span>, intent, requestCode);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line"> </div><div class="line"><span class="comment">//4.        </span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivityFromChild</span><span class="params">(@NonNull Activity child, @RequiresPermission Intent intent,</span></span></div><div class="line">            <span class="keyword">int</span> requestCode, @Nullable Bundle options) &#123;</div><div class="line">        options = transferSpringboardActivityOptions(options);</div><div class="line">        Instrumentation.ActivityResult ar =</div><div class="line">            mInstrumentation.execStartActivity(</div><div class="line">                <span class="keyword">this</span>, mMainThread.getApplicationThread(), mToken, child,</div><div class="line">                intent, requestCode, options);</div><div class="line">        <span class="keyword">if</span> (ar != <span class="keyword">null</span>) &#123;</div><div class="line">            mMainThread.sendActivityResult(</div><div class="line">                mToken, child.mEmbeddedID, requestCode,</div><div class="line">                ar.getResultCode(), ar.getResultData());</div><div class="line">        &#125;</div><div class="line">        cancelInputsAndStartExitTransition(options);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <p>startActivity会调用到Activty的startActivity(Intent intent, @Nullable Bundle options)方法，然后根据bundle的传值来做不同判断，但是最终都会调用到startActivityForResult(@RequiresPermission Intent intent, int requestCode,@Nullable Bundle options)这个方法，这个方法中会根据mParent变量调用不同的方法，仔细看上面3，4处的代码，代码是一样的，都会调用了Instrumentation.ActivityResult ar = mInstrumentation.execStartActivity(this,mMainThread.getApplicationThread(), mToken, child,intent, requestCode, options);这里是真正开始创建Activity的地方。<br>下面来看一下Instrumentation类中的execStartActivity方法:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> ActivityResult <span class="title">execStartActivity</span><span class="params">(</span></span></div><div class="line">        Context who, IBinder contextThread, IBinder token, String target,</div><div class="line">        Intent intent, <span class="keyword">int</span> requestCode, Bundle options) &#123;</div><div class="line">        </div><div class="line">        ......省略代码</div><div class="line">        </div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            intent.migrateExtraStreamToClipData();</div><div class="line">            intent.prepareToLeaveProcess(who);</div><div class="line">            <span class="comment">//分析1</span></div><div class="line">            <span class="keyword">int</span> result = ActivityManager.getService()</div><div class="line">                .startActivity(whoThread, who.getBasePackageName(), intent,</div><div class="line">                        intent.resolveTypeIfNeeded(who.getContentResolver()),</div><div class="line">                        token, target, requestCode, <span class="number">0</span>, <span class="keyword">null</span>, options);</div><div class="line">            checkStartActivityResult(result, intent); 检验结果</div><div class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Failure from system"</span>, e);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
@@ -409,7 +409,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/09/06/Activity启动过程二/" rel="prev" title="Activity启动过程二">
+              <a href="/2019/09/06/Activity启动过程分析二/" rel="prev" title="Activity启动过程二">
                 Activity启动过程二 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -437,8 +437,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2019/09/05/Activity启动过程一/"
-           data-title="Activity启动过程一" data-url="https://lijionghui.github.io/2019/09/05/Activity启动过程一/">
+      <div class="ds-thread" data-thread-key="2019/09/05/Activity启动过程分析一/"
+           data-title="Activity启动过程一" data-url="https://lijionghui.github.io/2019/09/05/Activity启动过程分析一/">
       </div>
     
   </div>
@@ -538,7 +538,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Activity启动过程一"><span class="nav-number">1.</span> <span class="nav-text">Activity启动过程一</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Activity启动过程分析一"><span class="nav-number">1.</span> <span class="nav-text">Activity启动过程分析一</span></a></li></ol></div>
             
 
           </div>
